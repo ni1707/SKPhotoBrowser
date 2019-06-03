@@ -15,6 +15,7 @@ import UIKit
     var contentMode: UIView.ContentMode { get set }
     func loadUnderlyingImageAndNotify()
     func checkCache()
+    var isLoad: Bool { get set }
 }
 
 // MARK: - SKPhoto
@@ -25,7 +26,8 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
     open var contentMode: UIView.ContentMode = .scaleAspectFill
     open var shouldCachePhotoURLImage: Bool = false
     open var photoURL: String!
-
+    open var isLoad: Bool = false
+    
     override init() {
         super.init()
     }
@@ -62,6 +64,7 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
         } else {
             if let img = SKCache.sharedCache.imageForKey(photoURL) {
                 underlyingImage = img
+                isLoad = true
             }
         }
     }
@@ -94,6 +97,7 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                     DispatchQueue.main.async {
                         self.underlyingImage = image
                         self.loadUnderlyingImageComplete()
+                        self.isLoad = true
                     }
                 }
                 
